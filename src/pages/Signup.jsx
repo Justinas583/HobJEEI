@@ -15,12 +15,12 @@ export const Signup = () => {
     });
     const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
-            signup(formData.name, formData.email, formData.password, formData.role);
+            await signup(formData.name, formData.email, formData.password, formData.role);
             navigate('/');
         } catch (err) {
             setError(err.message);

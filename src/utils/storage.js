@@ -1,161 +1,307 @@
-const STORAGE_KEY = 'hobjeei_events';
-const CONFIG_KEY = 'hobjeei_config';
-const USERS_KEY = 'hobjeei_users';
-const AUTH_KEY = 'hobjeei_auth';
+import { supabase } from '../lib/supabase';
 
 export const storage = {
+  // Config (keep local for now as it's app settings, not data)
   getConfig: () => {
-    const config = localStorage.getItem(CONFIG_KEY);
+    const config = localStorage.getItem('hobjeei_config');
     return config ? JSON.parse(config) : {};
   },
 
   saveConfig: (config) => {
-    localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+    localStorage.setItem('hobjeei_config', JSON.stringify(config));
   },
 
-  getEvents: () => {
-    const events = localStorage.getItem(STORAGE_KEY);
-    return events ? JSON.parse(events) : [];
-  },
+  // Events
+  getEvents: async () => {
+    const { data, error } = await supabase
+      .from('events')
+      .select(`
+        *,
+        attendees (*)
+      `);
 
-  saveEvents: (events) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-  },
-
-  addEvent: (eventData) => {
-    const events = storage.getEvents();
-    const newEvent = {
-      id: crypto.randomUUID(),
-      ...eventData,
-      attendees: [],
-      createdAt: new Date().toISOString()
-    };
-    events.push(newEvent);
-    storage.saveEvents(events);
-    return newEvent;
-  },
-
-  getEvent: (id) => {
-    const events = storage.getEvents();
-    return events.find(e => e.id === id);
-  },
-
-  addAttendee: (eventId, name, userId = null, attended = true) => {
-    const events = storage.getEvents();
-    const eventIndex = events.findIndex(e => e.id === eventId);
-    if (eventIndex === -1) return null;
-
-    // Check if user already registered
-    if (userId && events[eventIndex].attendees.some(a => a.userId === userId)) {
-      return null; // User already registered
+    if (error) {
+      console.error('Error fetching events:', error);
+      return [];
     }
 
-    const newAttendee = {
-      id: crypto.randomUUID(),
-      name,
-      userId, // Track which user registered
-      attended: attended, // Use the provided attended status
-      registeredAt: new Date().toISOString()
+    // Transform data to match app structure (attendees is an array)
+    return data.map(event => ({
+      ...event,
+      // Ensure date is a string if it comes back as Date object, though Supabase returns strings
+      date: event.date,
+      attendees: (event.attendees || []).map(a => ({
+        ...a,
+        userId: a.user_id,
+        eventId: a.event_id
+      })),
+      // Map snake_case to camelCase if needed, but let's try to stick to what we have.
+      // The app uses camelCase (ownerId, maxAttendees). Supabase columns are usually snake_case.
+      // We need to map them or update the app. Mapping is safer for now.
+      ownerId: event.owner_id,
+      ownerName: event.owner_name,
+      maxAttendees: event.max_attendees,
+      locationUrl: event.location_url,
+      imageUrl: event.image_url,
+      recurring: {
+        enabled: event.recurring_enabled,
+        frequency: event.recurring_frequency,
+        weekdays: event.recurring_weekdays
+      }
+    }));
+  },
+
+  addEvent: async (eventData) => {
+    const { data, error } = await supabase
+      .from('events')
+      .insert([{
+        title: eventData.title,
+        description: eventData.description,
+        date: eventData.date,
+        location: eventData.location,
+        location_url: eventData.locationUrl,
+        latitude: eventData.latitude,
+        longitude: eventData.longitude,
+        image_url: eventData.imageUrl,
+        type: eventData.type,
+        max_attendees: eventData.maxAttendees,
+        owner_id: eventData.ownerId,
+        owner_name: eventData.ownerName,
+        duration: eventData.duration,
+        recurring_enabled: eventData.recurring?.enabled,
+        recurring_frequency: eventData.recurring?.frequency,
+        recurring_weekdays: eventData.recurring?.weekdays
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding event:', error);
+      throw error;
+    }
+
+    return {
+      ...data,
+      attendees: [],
+      ownerId: data.owner_id,
+      ownerName: data.owner_name,
+      maxAttendees: data.max_attendees,
+      locationUrl: data.location_url,
+      imageUrl: data.image_url,
+      recurring: {
+        enabled: data.recurring_enabled,
+        frequency: data.recurring_frequency,
+        weekdays: data.recurring_weekdays
+      }
     };
-
-    events[eventIndex].attendees.push(newAttendee);
-    storage.saveEvents(events);
-    return newAttendee;
   },
 
-  toggleAttendance: (eventId, attendeeId) => {
-    const events = storage.getEvents();
-    const eventIndex = events.findIndex(e => e.id === eventId);
-    if (eventIndex === -1) return null;
+  getEvent: async (id) => {
+    const { data, error } = await supabase
+      .from('events')
+      .select(`
+        *,
+        attendees (*)
+      `)
+      .eq('id', id)
+      .single();
 
-    const attendeeIndex = events[eventIndex].attendees.findIndex(a => a.id === attendeeId);
-    if (attendeeIndex === -1) return null;
+    if (error) return null;
 
-    events[eventIndex].attendees[attendeeIndex].attended = !events[eventIndex].attendees[attendeeIndex].attended;
-    storage.saveEvents(events);
-    return events[eventIndex];
+    return {
+      ...data,
+      attendees: (data.attendees || []).map(a => ({
+        ...a,
+        userId: a.user_id,
+        eventId: a.event_id
+      })),
+      ownerId: data.owner_id,
+      ownerName: data.owner_name,
+      maxAttendees: data.max_attendees,
+      locationUrl: data.location_url,
+      imageUrl: data.image_url,
+      recurring: {
+        enabled: data.recurring_enabled,
+        frequency: data.recurring_frequency,
+        weekdays: data.recurring_weekdays
+      }
+    };
   },
 
-  deleteEvent: (eventId) => {
-    const events = storage.getEvents();
-    const filteredEvents = events.filter(e => e.id !== eventId);
-    storage.saveEvents(filteredEvents);
+  updateEvent: async (eventId, updates) => {
+    // Map camelCase updates to snake_case
+    const dbUpdates = {};
+    if (updates.title) dbUpdates.title = updates.title;
+    if (updates.description) dbUpdates.description = updates.description;
+    if (updates.date) dbUpdates.date = updates.date;
+    if (updates.location) dbUpdates.location = updates.location;
+    if (updates.locationUrl) dbUpdates.location_url = updates.locationUrl;
+    if (updates.latitude) dbUpdates.latitude = updates.latitude;
+    if (updates.longitude) dbUpdates.longitude = updates.longitude;
+    if (updates.imageUrl) dbUpdates.image_url = updates.imageUrl;
+    if (updates.type) dbUpdates.type = updates.type;
+    if (updates.maxAttendees) dbUpdates.max_attendees = updates.maxAttendees;
+    if (updates.duration) dbUpdates.duration = updates.duration;
+    if (updates.recurring) {
+      dbUpdates.recurring_enabled = updates.recurring.enabled;
+      dbUpdates.recurring_frequency = updates.recurring.frequency;
+      dbUpdates.recurring_weekdays = updates.recurring.weekdays;
+    }
+
+    const { data, error } = await supabase
+      .from('events')
+      .update(dbUpdates)
+      .eq('id', eventId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating event:', error);
+      throw error;
+    }
+
+    return data;
+  },
+
+  toggleAttendance: async (eventId, attendeeId) => {
+    // First get current status
+    const { data: attendee, error: fetchError } = await supabase
+      .from('attendees')
+      .select('attended')
+      .eq('id', attendeeId)
+      .single();
+
+    if (fetchError) return null;
+
+    // Toggle it
+    const { data, error } = await supabase
+      .from('attendees')
+      .update({ attended: !attendee.attended })
+      .eq('id', attendeeId)
+      .select()
+      .single();
+
+    if (error) return null;
+    return data;
+  },
+
+  deleteEvent: async (eventId) => {
+    const { error } = await supabase
+      .from('events')
+      .delete()
+      .eq('id', eventId);
+
+    if (error) {
+      console.error('Error deleting event:', error);
+      return false;
+    }
     return true;
   },
 
-  deleteAttendee: (eventId, attendeeId) => {
-    const events = storage.getEvents();
-    const eventIndex = events.findIndex(e => e.id === eventId);
-    if (eventIndex === -1) return null;
+  // Attendees
+  addAttendee: async (eventId, name, userId = null, attended = true) => {
+    // Check if already registered
+    if (userId) {
+      const { data: existing } = await supabase
+        .from('attendees')
+        .select('id')
+        .eq('event_id', eventId)
+        .eq('user_id', userId)
+        .single();
 
-    events[eventIndex].attendees = events[eventIndex].attendees.filter(a => a.id !== attendeeId);
-    storage.saveEvents(events);
-    return events[eventIndex];
-  },
+      if (existing) return null;
+    }
 
-  updateEvent: (eventId, updates) => {
-    const events = storage.getEvents();
-    const eventIndex = events.findIndex(e => e.id === eventId);
-    if (eventIndex === -1) return null;
+    const { data, error } = await supabase
+      .from('attendees')
+      .insert([{
+        event_id: eventId,
+        name,
+        user_id: userId,
+        attended
+      }])
+      .select()
+      .single();
 
-    events[eventIndex] = {
-      ...events[eventIndex],
-      ...updates,
-      id: eventId, // Preserve ID
-      attendees: events[eventIndex].attendees // Preserve attendees
+    if (error) {
+      console.error('Error adding attendee:', error);
+      return null;
+    }
+
+    return {
+      ...data,
+      userId: data.user_id,
+      eventId: data.event_id
     };
-    storage.saveEvents(events);
-    return events[eventIndex];
   },
 
-  unregisterAttendee: (eventId, userId) => {
-    const events = storage.getEvents();
-    const eventIndex = events.findIndex(e => e.id === eventId);
-    if (eventIndex === -1) return null;
+  deleteAttendee: async (eventId, attendeeId) => {
+    const { error } = await supabase
+      .from('attendees')
+      .delete()
+      .eq('id', attendeeId);
 
-    events[eventIndex].attendees = events[eventIndex].attendees.filter(a => a.userId !== userId);
-    storage.saveEvents(events);
-    return events[eventIndex];
+    if (error) return null;
+    return true;
   },
 
-  // User management
-  getUsers: () => {
-    const users = localStorage.getItem(USERS_KEY);
-    return users ? JSON.parse(users) : [];
+  unregisterAttendee: async (eventId, userId) => {
+    const { error } = await supabase
+      .from('attendees')
+      .delete()
+      .eq('event_id', eventId)
+      .eq('user_id', userId);
+
+    if (error) return null;
+    return true;
   },
 
-  saveUsers: (users) => {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  // Users
+  getUsers: async () => {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*');
+
+    if (error) return [];
+    return data;
   },
 
-  getUserByEmail: (email) => {
-    const users = storage.getUsers();
-    return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  getUserByEmail: async (email) => {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .ilike('email', email) // Case insensitive
+      .single();
+
+    if (error) return null;
+    return data;
   },
 
-  addUser: (userData) => {
-    const users = storage.getUsers();
-    const newUser = {
-      id: crypto.randomUUID(),
-      ...userData,
-      createdAt: new Date().toISOString()
-    };
-    users.push(newUser);
-    storage.saveUsers(users);
-    return newUser;
+  addUser: async (userData) => {
+    const { data, error } = await supabase
+      .from('users')
+      .insert([userData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding user:', error);
+      throw error;
+    }
+    return data;
   },
 
-  // Auth
+  // Auth (Local Session)
   getCurrentUser: () => {
-    const auth = localStorage.getItem(AUTH_KEY);
+    const auth = localStorage.getItem('hobjeei_auth');
     return auth ? JSON.parse(auth) : null;
   },
 
   setCurrentUser: (user) => {
     if (user) {
-      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+      localStorage.setItem('hobjeei_auth', JSON.stringify(user));
     } else {
-      localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem('hobjeei_auth');
     }
   }
 };

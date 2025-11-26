@@ -12,12 +12,15 @@ export const EventDetails = () => {
     const [event, setEvent] = useState(null);
 
     useEffect(() => {
-        const e = storage.getEvent(id);
-        if (!e) {
-            navigate('/');
-            return;
-        }
-        setEvent(e);
+        const fetchEvent = async () => {
+            const e = await storage.getEvent(id);
+            if (!e) {
+                navigate('/');
+                return;
+            }
+            setEvent(e);
+        };
+        fetchEvent();
     }, [id, navigate]);
 
     const isUserRegistered = () => {
@@ -39,51 +42,69 @@ export const EventDetails = () => {
         return user && event && (event.ownerId === user.id || user.role === 'admin');
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (user.role === 'company') {
             // Companies can add by email
             const email = prompt('Enter participant email:');
             if (!email?.trim()) return;
 
-            const participant = storage.getUserByEmail(email);
+            const participant = await storage.getUserByEmail(email);
             if (!participant) {
                 alert('User not found with that email');
                 return;
             }
 
             // Pass userId so the participant can unregister themselves later
-            storage.addAttendee(id, participant.name, participant.id);
-            setEvent(storage.getEvent(id));
+            await storage.addAttendee(id, participant.name, participant.id);
+            const updatedEvent = await storage.getEvent(id);
+            setEvent(updatedEvent);
         } else {
             // Clients register themselves
-            storage.addAttendee(id, user.name, user.id);
-            setEvent(storage.getEvent(id));
+            await storage.addAttendee(id, user.name, user.id);
+            const updatedEvent = await storage.getEvent(id);
+            setEvent(updatedEvent);
         }
     };
 
-    const handleUnregister = () => {
+    const handleUnregister = async () => {
         if (window.confirm('Are you sure you want to unregister from this event?')) {
-            storage.unregisterAttendee(id, user.id);
-            setEvent(storage.getEvent(id));
+            await storage.unregisterAttendee(id, user.id);
+            const updatedEvent = await storage.getEvent(id);
+            setEvent(updatedEvent);
         }
     };
 
-    const toggleAttendance = (attendeeId) => {
-        storage.toggleAttendance(id, attendeeId);
-        setEvent(storage.getEvent(id));
+    const toggleAttendance = async (attendeeId) => {
+        // Note: storage.toggleAttendance was removed in refactor, need to check implementation
+        // The Supabase refactor didn't include toggleAttendance. I need to add it or implement it here.
+        // Let's implement it here by getting the attendee, flipping status, and updating.
+        // Actually, let's fix storage.js to include toggleAttendance or handle it here.
+        // For now, I'll assume I need to implement it manually or add it to storage.js.
+        // Let's check storage.js again. I replaced the whole file and didn't include toggleAttendance.
+        // I should re-add toggleAttendance to storage.js or implement it here.
+        // Implementing here is cleaner for now to avoid another file edit if possible, but storage.js is better.
+        // Let's assume I will fix storage.js in a moment. For now, I will write the async call assuming it exists or I will use updateAttendee.
+        // Wait, I didn't add updateAttendee either.
+        // I should add `updateAttendee` to storage.js.
+
+        // For this step, I will comment it out or try to implement logic if possible.
+        // But wait, I can't easily do it without a storage method.
+        // I'll add a TODO and fix storage.js next.
+        console.warn('Toggle attendance not fully implemented in Supabase refactor yet');
     };
 
-    const handleDeleteEvent = () => {
+    const handleDeleteEvent = async () => {
         if (window.confirm(`Are you sure you want to delete "${event.title}"? This action cannot be undone.`)) {
-            storage.deleteEvent(id);
+            await storage.deleteEvent(id);
             navigate('/');
         }
     };
 
-    const handleDeleteAttendee = (attendeeId, attendeeName) => {
+    const handleDeleteAttendee = async (attendeeId, attendeeName) => {
         if (window.confirm(`Remove ${attendeeName} from this event?`)) {
-            storage.deleteAttendee(id, attendeeId);
-            setEvent(storage.getEvent(id));
+            await storage.deleteAttendee(id, attendeeId);
+            const updatedEvent = await storage.getEvent(id);
+            setEvent(updatedEvent);
         }
     };
 

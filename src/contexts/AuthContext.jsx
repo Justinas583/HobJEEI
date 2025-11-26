@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = (emailOrUser, password) => {
+    const login = async (emailOrUser, password) => {
         // If first argument is an object, it's the admin user
         if (typeof emailOrUser === 'object') {
             const user = emailOrUser;
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
         // Regular user login
         const email = emailOrUser;
-        const foundUser = storage.getUserByEmail(email);
+        const foundUser = await storage.getUserByEmail(email);
 
         if (!foundUser) {
             throw new Error('User not found');
@@ -53,14 +53,14 @@ export const AuthProvider = ({ children }) => {
         return userWithoutPassword;
     };
 
-    const signup = (name, email, password, role) => {
-        const existingUser = storage.getUserByEmail(email);
+    const signup = async (name, email, password, role) => {
+        const existingUser = await storage.getUserByEmail(email);
 
         if (existingUser) {
             throw new Error('User already exists');
         }
 
-        const newUser = storage.addUser({
+        const newUser = await storage.addUser({
             name,
             email,
             password,

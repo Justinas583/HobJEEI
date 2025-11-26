@@ -14,50 +14,54 @@ export const Dashboard = () => {
     const { user } = useAuth();
 
     useEffect(() => {
-        let allEvents = storage.getEvents();
+        const fetchEvents = async () => {
+            let allEvents = await storage.getEvents();
 
-        // Apply filter if toggle is on
-        if (showMyEventsOnly && user) {
-            if (user.role === 'client') {
-                // Show only events where user is registered
-                allEvents = allEvents.filter(event =>
-                    event.attendees.some(attendee => attendee.userId === user.id)
-                );
-            } else if (user.role === 'company') {
-                // Show only events created by this company
-                allEvents = allEvents.filter(event => event.ownerId === user.id);
+            // Apply filter if toggle is on
+            if (showMyEventsOnly && user) {
+                if (user.role === 'client') {
+                    // Show only events where user is registered
+                    allEvents = allEvents.filter(event =>
+                        event.attendees.some(attendee => attendee.userId === user.id)
+                    );
+                } else if (user.role === 'company') {
+                    // Show only events created by this company
+                    allEvents = allEvents.filter(event => event.ownerId === user.id);
+                }
+                // Admin sees all events regardless
             }
-            // Admin sees all events regardless
-        }
 
-        // Apply type filter
-        if (selectedType !== 'All') {
-            allEvents = allEvents.filter(event => event.type === selectedType);
-        }
+            // Apply type filter
+            if (selectedType !== 'All') {
+                allEvents = allEvents.filter(event => event.type === selectedType);
+            }
 
-        // Apply search filter
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase();
-            allEvents = allEvents.filter(event =>
-                event.title.toLowerCase().includes(query) ||
-                (event.location && event.location.toLowerCase().includes(query)) ||
-                (event.ownerName && event.ownerName.toLowerCase().includes(query)) ||
-                (event.description && event.description.toLowerCase().includes(query))
-            );
-        }
+            // Apply search filter
+            if (searchQuery.trim()) {
+                const query = searchQuery.toLowerCase();
+                allEvents = allEvents.filter(event =>
+                    event.title.toLowerCase().includes(query) ||
+                    (event.location && event.location.toLowerCase().includes(query)) ||
+                    (event.ownerName && event.ownerName.toLowerCase().includes(query)) ||
+                    (event.description && event.description.toLowerCase().includes(query))
+                );
+            }
 
-        // Sort by date (earliest first)
-        const sortedEvents = allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-        setEvents(sortedEvents);
+            // Sort by date (earliest first)
+            const sortedEvents = allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+            setEvents(sortedEvents);
+        };
+
+        fetchEvents();
     }, [showMyEventsOnly, selectedType, searchQuery, user]);
 
-    const handleDelete = (e, eventId, eventTitle) => {
+    const handleDelete = async (e, eventId, eventTitle) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (window.confirm(`Are you sure you want to delete "${eventTitle}"?`)) {
-            storage.deleteEvent(eventId);
-            const allEvents = storage.getEvents();
+            await storage.deleteEvent(eventId);
+            const allEvents = await storage.getEvents();
             const sortedEvents = allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
             setEvents(sortedEvents);
         }

@@ -19,8 +19,11 @@ export const CalendarPage = () => {
     const [expandedEvents, setExpandedEvents] = useState([]);
 
     useEffect(() => {
-        const allEvents = storage.getEvents();
-        setEvents(allEvents);
+        const fetchEvents = async () => {
+            const allEvents = await storage.getEvents();
+            setEvents(allEvents);
+        };
+        fetchEvents();
     }, []);
 
     // Generate recurring event instances for a given date range

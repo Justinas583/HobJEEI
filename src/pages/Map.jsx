@@ -35,10 +35,13 @@ export const Map = () => {
     const { user } = useAuth();
 
     useEffect(() => {
-        // Get all events that have coordinates
-        const allEvents = storage.getEvents();
-        const eventsWithCoords = allEvents.filter(e => e.latitude && e.longitude);
-        setEvents(eventsWithCoords);
+        const fetchEvents = async () => {
+            // Get all events that have coordinates
+            const allEvents = await storage.getEvents();
+            const eventsWithCoords = allEvents.filter(e => e.latitude && e.longitude);
+            setEvents(eventsWithCoords);
+        };
+        fetchEvents();
     }, []);
 
     // Default center (Vilnius, Lithuania)

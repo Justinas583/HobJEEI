@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 
 export const Login = () => {
+    const navigate = useNavigate();
     const { login } = useAuth();
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
@@ -22,10 +23,12 @@ export const Login = () => {
                     name: 'Administrator',
                     role: 'admin'
                 };
-                login(adminUser);
+                await login(adminUser);
+                navigate('/'); // Redirect after admin login
             } else {
                 // Regular user login
-                login(formData.email, formData.password);
+                await login(formData.email, formData.password);
+                navigate('/'); // Redirect after user login
             }
         } catch (err) {
             setError(err.message);

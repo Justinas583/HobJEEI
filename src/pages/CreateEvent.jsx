@@ -25,7 +25,7 @@ export const CreateEvent = () => {
         recurringWeekdays: []
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const eventData = {
@@ -53,7 +53,7 @@ export const CreateEvent = () => {
             }
         };
 
-        storage.addEvent(eventData);
+        await storage.addEvent(eventData);
         navigate('/');
     };
 

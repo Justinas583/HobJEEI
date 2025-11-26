@@ -12,37 +12,40 @@ export const EditEvent = () => {
     const [formData, setFormData] = useState(null);
 
     useEffect(() => {
-        const event = storage.getEvent(id);
-        if (!event) {
-            navigate('/');
-            return;
-        }
+        const fetchEvent = async () => {
+            const event = await storage.getEvent(id);
+            if (!event) {
+                navigate('/');
+                return;
+            }
 
-        // Check if user is owner
-        if (event.ownerId !== user.id && user.role !== 'admin') {
-            navigate(`/event/${id}`);
-            return;
-        }
+            // Check if user is owner
+            if (event.ownerId !== user.id && user.role !== 'admin') {
+                navigate(`/event/${id}`);
+                return;
+            }
 
-        setFormData({
-            title: event.title,
-            description: event.description,
-            date: event.date,
-            duration: event.duration || '60',
-            type: event.type,
-            location: event.location || '',
-            locationUrl: event.locationUrl || '',
-            latitude: event.latitude || '',
-            longitude: event.longitude || '',
-            imageUrl: event.imageUrl || '',
-            maxAttendees: event.maxAttendees || '',
-            recurringEnabled: event.recurring?.enabled || false,
-            recurringFrequency: event.recurring?.frequency || 'weekly',
-            recurringWeekdays: event.recurring?.weekdays || []
-        });
+            setFormData({
+                title: event.title,
+                description: event.description,
+                date: event.date,
+                duration: event.duration || '60',
+                type: event.type,
+                location: event.location || '',
+                locationUrl: event.locationUrl || '',
+                latitude: event.latitude || '',
+                longitude: event.longitude || '',
+                imageUrl: event.imageUrl || '',
+                maxAttendees: event.maxAttendees || '',
+                recurringEnabled: event.recurring?.enabled || false,
+                recurringFrequency: event.recurring?.frequency || 'weekly',
+                recurringWeekdays: event.recurring?.weekdays || []
+            });
+        };
+        fetchEvent();
     }, [id, user, navigate]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const updates = {
@@ -68,7 +71,7 @@ export const EditEvent = () => {
             }
         };
 
-        storage.updateEvent(id, updates);
+        await storage.updateEvent(id, updates);
         navigate(`/event/${id}`);
     };
 
