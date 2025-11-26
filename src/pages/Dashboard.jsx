@@ -9,6 +9,8 @@ import { useAuth } from '../contexts/AuthContext';
 export const Dashboard = () => {
     const [events, setEvents] = useState([]);
     const [showMyEventsOnly, setShowMyEventsOnly] = useState(false);
+    const [selectedType, setSelectedType] = useState('All');
+    const [searchQuery, setSearchQuery] = useState('');
     const { user } = useAuth();
 
     useEffect(() => {
@@ -28,10 +30,26 @@ export const Dashboard = () => {
             // Admin sees all events regardless
         }
 
+        // Apply type filter
+        if (selectedType !== 'All') {
+            allEvents = allEvents.filter(event => event.type === selectedType);
+        }
+
+        // Apply search filter
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase();
+            allEvents = allEvents.filter(event =>
+                event.title.toLowerCase().includes(query) ||
+                (event.location && event.location.toLowerCase().includes(query)) ||
+                (event.ownerName && event.ownerName.toLowerCase().includes(query)) ||
+                (event.description && event.description.toLowerCase().includes(query))
+            );
+        }
+
         // Sort by date (earliest first)
         const sortedEvents = allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
         setEvents(sortedEvents);
-    }, [showMyEventsOnly, user]);
+    }, [showMyEventsOnly, selectedType, searchQuery, user]);
 
     const handleDelete = (e, eventId, eventTitle) => {
         e.preventDefault();
@@ -54,31 +72,71 @@ export const Dashboard = () => {
     return (
         <div>
             <div className="flex-between" style={{ marginBottom: 'var(--spacing-lg)' }}>
-                <h1 className="text-2xl">Upcoming Events</h1>
-                <div style={{ display: 'flex', gap: 'var(--spacing-md)', alignItems: 'center' }}>
-                    {user?.role !== 'admin' && (
-                        <label style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 'var(--spacing-xs)',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            color: 'var(--color-text-muted)'
-                        }}>
-                            <input
-                                type="checkbox"
-                                checked={showMyEventsOnly}
-                                onChange={(e) => setShowMyEventsOnly(e.target.checked)}
-                                style={{ width: 'auto', cursor: 'pointer' }}
-                            />
-                            {getFilterLabel()}
-                        </label>
-                    )}
-                    {(user?.role === 'company' || user?.role === 'admin') && (
-                        <Link to="/create">
-                            <Button>+ New Event</Button>
-                        </Link>
-                    )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', width: '100%' }}>
+                    <div className="flex-between">
+                        <h1 className="text-2xl">Upcoming Events</h1>
+                        {(user?.role === 'company' || user?.role === 'admin') && (
+                            <Link to="/create">
+                                <Button>+ New Event</Button>
+                            </Link>
+                        )}
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <input
+                            type="text"
+                            placeholder="Search events..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{
+                                flex: '1 1 200px',
+                                minWidth: '200px',
+                                padding: '8px 12px',
+                                borderRadius: 'var(--radius-sm)',
+                                border: '1px solid var(--color-border)',
+                                fontSize: '0.875rem'
+                            }}
+                        />
+
+                        {user?.role !== 'admin' && (
+                            <label style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-xs)',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                color: 'var(--color-text-muted)',
+                                whiteSpace: 'nowrap'
+                            }}>
+                                <input
+                                    type="checkbox"
+                                    checked={showMyEventsOnly}
+                                    onChange={(e) => setShowMyEventsOnly(e.target.checked)}
+                                    style={{ width: 'auto', cursor: 'pointer' }}
+                                />
+                                {getFilterLabel()}
+                            </label>
+                        )}
+
+                        <select
+                            value={selectedType}
+                            onChange={(e) => setSelectedType(e.target.value)}
+                            style={{
+                                padding: '8px 12px',
+                                borderRadius: 'var(--radius-sm)',
+                                border: '1px solid var(--color-border)',
+                                fontSize: '0.875rem',
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)'
+                            }}
+                        >
+                            <option value="All">All Types</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Hobby">Hobby</option>
+                            <option value="Meeting">Meeting</option>
+                            <option value="Social">Social</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
