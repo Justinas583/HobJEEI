@@ -11,6 +11,7 @@ export const Dashboard = () => {
     const [showMyEventsOnly, setShowMyEventsOnly] = useState(false);
     const [selectedType, setSelectedType] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('date');
     const { user } = useAuth();
 
     useEffect(() => {
@@ -47,13 +48,20 @@ export const Dashboard = () => {
                 );
             }
 
-            // Sort by date (earliest first)
-            const sortedEvents = allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-            setEvents(sortedEvents);
+            // Sort events
+            if (sortBy === 'date') {
+                allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortBy === 'price-low') {
+                allEvents.sort((a, b) => (a.price || 0) - (b.price || 0));
+            } else if (sortBy === 'price-high') {
+                allEvents.sort((a, b) => (b.price || 0) - (a.price || 0));
+            }
+
+            setEvents(allEvents);
         };
 
         fetchEvents();
-    }, [showMyEventsOnly, selectedType, searchQuery, user]);
+    }, [showMyEventsOnly, selectedType, searchQuery, sortBy, user]);
 
     const handleDelete = async (e, eventId, eventTitle) => {
         e.preventDefault();
@@ -139,6 +147,24 @@ export const Dashboard = () => {
                             <option value="Hobby">Hobby</option>
                             <option value="Meeting">Meeting</option>
                             <option value="Social">Social</option>
+                        </select>
+
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            style={{
+                                padding: '8px 12px',
+                                borderRadius: 'var(--radius-sm)',
+                                border: '1px solid var(--color-border)',
+                                fontSize: '0.875rem',
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <option value="date">Sort by Date</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
                         </select>
                     </div>
                 </div>
@@ -239,9 +265,14 @@ export const Dashboard = () => {
                                             ⏱️ {event.duration} min
                                         </p>
                                     )}
-                                    <p className="text-sm" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-text-muted)' }}>
+                                    <p className="text-sm" style={{ marginBottom: 'var(--spacing-xs)', color: 'var(--color-text-muted)' }}>
                                         👥 {event.attendees.length}{event.maxAttendees ? ` / ${event.maxAttendees}` : ''} attendees
                                     </p>
+                                    {event.price > 0 && (
+                                        <p className="text-sm" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-primary)', fontWeight: '600' }}>
+                                            💰 €{event.price.toFixed(2)}
+                                        </p>
+                                    )}
                                     <p style={{
                                         color: 'var(--color-text-muted)',
                                         display: '-webkit-box',

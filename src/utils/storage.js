@@ -41,6 +41,7 @@ export const storage = {
       ownerId: event.owner_id,
       ownerName: event.owner_name,
       maxAttendees: event.max_attendees,
+      price: event.price,
       locationUrl: event.location_url,
       imageUrl: event.image_url,
       recurring: {
@@ -65,6 +66,7 @@ export const storage = {
         image_url: eventData.imageUrl,
         type: eventData.type,
         max_attendees: eventData.maxAttendees,
+        price: eventData.price,
         owner_id: eventData.ownerId,
         owner_name: eventData.ownerName,
         duration: eventData.duration,
@@ -86,6 +88,7 @@ export const storage = {
       ownerId: data.owner_id,
       ownerName: data.owner_name,
       maxAttendees: data.max_attendees,
+      price: data.price,
       locationUrl: data.location_url,
       imageUrl: data.image_url,
       recurring: {
@@ -118,6 +121,7 @@ export const storage = {
       ownerId: data.owner_id,
       ownerName: data.owner_name,
       maxAttendees: data.max_attendees,
+      price: data.price,
       locationUrl: data.location_url,
       imageUrl: data.image_url,
       recurring: {
@@ -141,6 +145,7 @@ export const storage = {
     if (updates.imageUrl) dbUpdates.image_url = updates.imageUrl;
     if (updates.type) dbUpdates.type = updates.type;
     if (updates.maxAttendees) dbUpdates.max_attendees = updates.maxAttendees;
+    if (updates.price !== undefined) dbUpdates.price = updates.price;
     if (updates.duration) dbUpdates.duration = updates.duration;
     if (updates.recurring) {
       dbUpdates.recurring_enabled = updates.recurring.enabled;

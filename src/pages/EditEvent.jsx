@@ -37,6 +37,7 @@ export const EditEvent = () => {
                 longitude: event.longitude || '',
                 imageUrl: event.imageUrl || '',
                 maxAttendees: event.maxAttendees || '',
+                price: event.price || '',
                 recurringEnabled: event.recurring?.enabled || false,
                 recurringFrequency: event.recurring?.frequency || 'weekly',
                 recurringWeekdays: event.recurring?.weekdays || []
@@ -60,6 +61,7 @@ export const EditEvent = () => {
             longitude: formData.longitude ? parseFloat(formData.longitude) : null,
             imageUrl: formData.imageUrl || null,
             maxAttendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
+            price: formData.price ? parseFloat(formData.price) : 0,
             recurring: {
                 enabled: formData.recurringEnabled,
                 frequency: formData.recurringEnabled ? formData.recurringFrequency : null,
@@ -205,6 +207,18 @@ export const EditEvent = () => {
                     </div>
 
                     <div>
+                        <label style={{ display: 'block', marginBottom: 'var(--spacing-xs)', fontSize: '0.875rem' }}>Price (€)</label>
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                            value={formData.price}
+                            onChange={e => setFormData({ ...formData, price: e.target.value })}
+                        />
+                    </div>
+
+                    <div>
                         <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', cursor: 'pointer' }}>
                             <input
                                 type="checkbox"
@@ -283,6 +297,6 @@ export const EditEvent = () => {
                     </div>
                 </form>
             </Card>
-        </div>
+        </div >
     );
 };

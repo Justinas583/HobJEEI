@@ -101,6 +101,14 @@ export const EventDetails = () => {
     };
 
     const handleDeleteAttendee = async (attendeeId, attendeeName) => {
+        // Check permissions: Admin can remove anyone, Company can remove from their own events
+        const canRemove = user.role === 'admin' || (user.role === 'company' && event.ownerId === user.id);
+
+        if (!canRemove) {
+            alert('You do not have permission to remove attendees from this event.');
+            return;
+        }
+
         if (window.confirm(`Remove ${attendeeName} from this event?`)) {
             await storage.deleteAttendee(id, attendeeId);
             const updatedEvent = await storage.getEvent(id);
@@ -248,6 +256,13 @@ export const EventDetails = () => {
                         </div>
                     )}
 
+                    {event.price > 0 && (
+                        <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                            <span style={{ fontSize: '0.875rem' }}>💰</span>
+                            <span style={{ color: 'var(--color-primary)', fontSize: '0.875rem', fontWeight: '600' }}>€{event.price.toFixed(2)}</span>
+                        </div>
+                    )}
+
                     <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginTop: 'var(--spacing-md)' }}>{event.description}</p>
                 </div>
             </Card>
@@ -308,7 +323,7 @@ export const EventDetails = () => {
 
                     return (
                         <Card key={attendee.id} style={{ padding: 'var(--spacing-md)', position: 'relative' }}>
-                            {user?.role === 'company' && (
+                            {(user?.role === 'admin' || (user?.role === 'company' && event.ownerId === user.id)) && (
                                 <button
                                     onClick={() => handleDeleteAttendee(attendee.id, attendee.name)}
                                     style={{
