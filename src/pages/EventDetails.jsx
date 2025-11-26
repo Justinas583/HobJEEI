@@ -117,106 +117,118 @@ export const EventDetails = () => {
                 </Button>
             </div>
 
-            <Card style={{ marginBottom: 'var(--spacing-lg)' }}>
-                <div className="flex-between" style={{ marginBottom: 'var(--spacing-md)' }}>
-                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <span style={{
-                            color: 'var(--color-primary)',
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px',
-                            fontSize: '0.875rem'
-                        }}>
-                            {event.type}
-                        </span>
-                        {recurringText && (
+            <Card style={{ marginBottom: 'var(--spacing-lg)', overflow: 'hidden', padding: 0 }}>
+                {event.imageUrl && (
+                    <div style={{
+                        width: '100%',
+                        height: '300px',
+                        backgroundImage: `url(${event.imageUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }} />
+                )}
+
+                <div style={{ padding: 'var(--spacing-lg)' }}>
+                    <div className="flex-between" style={{ marginBottom: 'var(--spacing-md)' }}>
+                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center', flexWrap: 'wrap' }}>
                             <span style={{
-                                background: 'rgba(59, 130, 246, 0.1)',
                                 color: 'var(--color-primary)',
-                                padding: '2px 8px',
-                                borderRadius: 'var(--radius-sm)',
-                                fontSize: '0.75rem'
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px',
+                                fontSize: '0.875rem'
                             }}>
-                                🔄 {recurringText}
+                                {event.type}
                             </span>
-                        )}
-                    </div>
-                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center' }}>
-                        <span className="text-sm">
-                            {new Date(event.date).toLocaleDateString()} at {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        {isOwner() && (
-                            <>
-                                <Link to={`/event/${id}/edit`}>
+                            {recurringText && (
+                                <span style={{
+                                    background: 'rgba(59, 130, 246, 0.1)',
+                                    color: 'var(--color-primary)',
+                                    padding: '2px 8px',
+                                    borderRadius: 'var(--radius-sm)',
+                                    fontSize: '0.75rem'
+                                }}>
+                                    🔄 {recurringText}
+                                </span>
+                            )}
+                        </div>
+                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center' }}>
+                            <span className="text-sm">
+                                {new Date(event.date).toLocaleDateString()} at {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            {isOwner() && (
+                                <>
+                                    <Link to={`/event/${id}/edit`}>
+                                        <button
+                                            style={{
+                                                background: 'rgba(59, 130, 246, 0.1)',
+                                                color: 'var(--color-primary)',
+                                                padding: '4px 8px',
+                                                borderRadius: 'var(--radius-sm)',
+                                                fontSize: '0.75rem',
+                                                transition: 'all 0.2s'
+                                            }}
+                                            onMouseEnter={(e) => e.target.style.background = 'var(--color-primary)'}
+                                            onMouseLeave={(e) => e.target.style.background = 'rgba(59, 130, 246, 0.1)'}
+                                        >
+                                            Edit
+                                        </button>
+                                    </Link>
                                     <button
+                                        onClick={handleDeleteEvent}
                                         style={{
-                                            background: 'rgba(59, 130, 246, 0.1)',
-                                            color: 'var(--color-primary)',
+                                            background: 'rgba(239, 68, 68, 0.1)',
+                                            color: 'var(--color-danger)',
                                             padding: '4px 8px',
                                             borderRadius: 'var(--radius-sm)',
                                             fontSize: '0.75rem',
                                             transition: 'all 0.2s'
                                         }}
-                                        onMouseEnter={(e) => e.target.style.background = 'var(--color-primary)'}
-                                        onMouseLeave={(e) => e.target.style.background = 'rgba(59, 130, 246, 0.1)'}
+                                        onMouseEnter={(e) => e.target.style.background = 'var(--color-danger)'}
+                                        onMouseLeave={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
                                     >
-                                        Edit
+                                        Delete
                                     </button>
-                                </Link>
-                                <button
-                                    onClick={handleDeleteEvent}
-                                    style={{
-                                        background: 'rgba(239, 68, 68, 0.1)',
-                                        color: 'var(--color-danger)',
-                                        padding: '4px 8px',
-                                        borderRadius: 'var(--radius-sm)',
-                                        fontSize: '0.75rem',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    onMouseEnter={(e) => e.target.style.background = 'var(--color-danger)'}
-                                    onMouseLeave={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    <h1 className="text-2xl" style={{ marginBottom: 'var(--spacing-md)' }}>{event.title}</h1>
+
+                    {event.location && (
+                        <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                            <span style={{ fontSize: '0.875rem' }}>📍</span>
+                            {event.locationUrl ? (
+                                <a
+                                    href={event.locationUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: 'var(--color-primary)', fontSize: '0.875rem', textDecoration: 'underline' }}
                                 >
-                                    Delete
-                                </button>
-                            </>
-                        )}
-                    </div>
+                                    {event.location}
+                                </a>
+                            ) : (
+                                <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{event.location}</span>
+                            )}
+                        </div>
+                    )}
+
+                    {event.ownerName && (
+                        <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                            <span style={{ fontSize: '0.875rem' }}>👤</span>
+                            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>Organized by {event.ownerName}</span>
+                        </div>
+                    )}
+
+                    {event.duration && (
+                        <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                            <span style={{ fontSize: '0.875rem' }}>⏱️</span>
+                            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{event.duration} minutes</span>
+                        </div>
+                    )}
+
+                    <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginTop: 'var(--spacing-md)' }}>{event.description}</p>
                 </div>
-
-                <h1 className="text-2xl" style={{ marginBottom: 'var(--spacing-md)' }}>{event.title}</h1>
-
-                {event.location && (
-                    <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
-                        <span style={{ fontSize: '0.875rem' }}>📍</span>
-                        {event.locationUrl ? (
-                            <a
-                                href={event.locationUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ color: 'var(--color-primary)', fontSize: '0.875rem', textDecoration: 'underline' }}
-                            >
-                                {event.location}
-                            </a>
-                        ) : (
-                            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{event.location}</span>
-                        )}
-                    </div>
-                )}
-
-                {event.ownerName && (
-                    <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
-                        <span style={{ fontSize: '0.875rem' }}>👤</span>
-                        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>Organized by {event.ownerName}</span>
-                    </div>
-                )}
-
-                {event.duration && (
-                    <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
-                        <span style={{ fontSize: '0.875rem' }}>⏱️</span>
-                        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{event.duration} minutes</span>
-                    </div>
-                )}
-
-                <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginTop: 'var(--spacing-md)' }}>{event.description}</p>
             </Card>
 
             <div className="flex-between" style={{ marginBottom: 'var(--spacing-md)' }}>

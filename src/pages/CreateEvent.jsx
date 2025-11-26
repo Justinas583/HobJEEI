@@ -16,6 +16,7 @@ export const CreateEvent = () => {
         type: 'Sport',
         location: '',
         locationUrl: '',
+        imageUrl: '',
         maxAttendees: '',
         recurringEnabled: false,
         recurringFrequency: 'weekly',
@@ -33,6 +34,7 @@ export const CreateEvent = () => {
             type: formData.type,
             location: formData.location || null,
             locationUrl: formData.locationUrl || null,
+            imageUrl: formData.imageUrl || null,
             maxAttendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
             ownerId: user.id,
             ownerName: user.name,
@@ -131,6 +133,16 @@ export const CreateEvent = () => {
                             placeholder="https://maps.google.com/..."
                             value={formData.locationUrl}
                             onChange={e => setFormData({ ...formData, locationUrl: e.target.value })}
+                        />
+                    </div>
+
+                    <div>
+                        <label style={{ display: 'block', marginBottom: 'var(--spacing-xs)', fontSize: '0.875rem' }}>Event Image URL (Optional)</label>
+                        <input
+                            type="url"
+                            placeholder="https://example.com/image.jpg"
+                            value={formData.imageUrl}
+                            onChange={e => setFormData({ ...formData, imageUrl: e.target.value })}
                         />
                     </div>
 

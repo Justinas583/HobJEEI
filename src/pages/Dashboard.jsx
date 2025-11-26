@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Masonry from 'react-masonry-css';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { storage } from '../utils/storage';
@@ -91,7 +92,15 @@ export const Dashboard = () => {
                     )}
                 </Card>
             ) : (
-                <div className="grid-auto">
+                <Masonry
+                    breakpointCols={{
+                        default: 3,
+                        1100: 2,
+                        700: 1
+                    }}
+                    className="masonry-grid"
+                    columnClassName="masonry-grid-column"
+                >
                     {events.map(event => {
                         const isOwner = (user?.role === 'company' && event.ownerId === user.id) || user?.role === 'admin';
                         const recurringText = event.recurring?.enabled
@@ -101,8 +110,8 @@ export const Dashboard = () => {
                             : null;
 
                         return (
-                            <Link key={event.id} to={`/event/${event.id}`}>
-                                <Card className="event-card" style={{ height: '100%', transition: 'transform 0.2s', position: 'relative' }}>
+                            <Link key={event.id} to={`/event/${event.id}`} style={{ display: 'block' }}>
+                                <Card className="event-card" style={{ transition: 'transform 0.2s', position: 'relative' }}>
                                     {isOwner && (
                                         <div onClick={(e) => e.stopPropagation()} style={{ position: 'absolute', top: 'var(--spacing-sm)', right: 'var(--spacing-sm)', zIndex: 10 }}>
                                             <button
@@ -174,7 +183,7 @@ export const Dashboard = () => {
                             </Link>
                         );
                     })}
-                </div>
+                </Masonry>
             )}
         </div>
     );

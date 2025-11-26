@@ -32,6 +32,7 @@ export const EditEvent = () => {
             type: event.type,
             location: event.location || '',
             locationUrl: event.locationUrl || '',
+            imageUrl: event.imageUrl || '',
             maxAttendees: event.maxAttendees || '',
             recurringEnabled: event.recurring?.enabled || false,
             recurringFrequency: event.recurring?.frequency || 'weekly',
@@ -50,6 +51,7 @@ export const EditEvent = () => {
             type: formData.type,
             location: formData.location || null,
             locationUrl: formData.locationUrl || null,
+            imageUrl: formData.imageUrl || null,
             maxAttendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
             recurring: {
                 enabled: formData.recurringEnabled,
@@ -148,6 +150,16 @@ export const EditEvent = () => {
                             placeholder="https://maps.google.com/..."
                             value={formData.locationUrl}
                             onChange={e => setFormData({ ...formData, locationUrl: e.target.value })}
+                        />
+                    </div>
+
+                    <div>
+                        <label style={{ display: 'block', marginBottom: 'var(--spacing-xs)', fontSize: '0.875rem' }}>Event Image URL (Optional)</label>
+                        <input
+                            type="url"
+                            placeholder="https://example.com/image.jpg"
+                            value={formData.imageUrl}
+                            onChange={e => setFormData({ ...formData, imageUrl: e.target.value })}
                         />
                     </div>
 

@@ -40,7 +40,7 @@ export const storage = {
     return events.find(e => e.id === id);
   },
 
-  addAttendee: (eventId, name, userId = null) => {
+  addAttendee: (eventId, name, userId = null, attended = true) => {
     const events = storage.getEvents();
     const eventIndex = events.findIndex(e => e.id === eventId);
     if (eventIndex === -1) return null;
@@ -54,7 +54,7 @@ export const storage = {
       id: crypto.randomUUID(),
       name,
       userId, // Track which user registered
-      attended: userId ? true : false, // Auto-present for client self-registration
+      attended: attended, // Use the provided attended status
       registeredAt: new Date().toISOString()
     };
 

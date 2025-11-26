@@ -172,3 +172,19 @@ select:focus {
 .btn-ghost:hover {
   background-color: var(--color-surface-hover);
 }
+
+/* Masonry Layout */
+.masonry-grid {
+  display: flex;
+  margin-left: calc(var(--spacing-md) * -1);
+  width: auto;
+}
+
+.masonry-grid-column {
+  padding-left: var(--spacing-md);
+  background-clip: padding-box;
+}
+
+.masonry-grid-column>* {
+  margin-bottom: var(--spacing-md);
+}
