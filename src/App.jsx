@@ -8,6 +8,8 @@ import { Dashboard } from './pages/Dashboard';
 import { CreateEvent } from './pages/CreateEvent';
 import { EditEvent } from './pages/EditEvent';
 import { EventDetails } from './pages/EventDetails';
+import { Map } from './pages/Map';
+import { CalendarPage } from './pages/Calendar';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 
@@ -36,6 +38,8 @@ function AppRoutes() {
         </ProtectedRoute>
       }>
         <Route index element={<Dashboard />} />
+        <Route path="map" element={<Map />} />
+        <Route path="calendar" element={<CalendarPage />} />
         <Route path="create" element={
           <ProtectedRoute>
             {({ user }) => (user.role === 'company' || user.role === 'admin') ? <CreateEvent /> : <Navigate to="/" replace />}

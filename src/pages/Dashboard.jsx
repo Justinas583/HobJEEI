@@ -111,21 +111,32 @@ export const Dashboard = () => {
 
                         return (
                             <Link key={event.id} to={`/event/${event.id}`} style={{ display: 'block' }}>
-                                <Card className="event-card" style={{ transition: 'transform 0.2s', position: 'relative' }}>
+                                <Card className="event-card" style={{ transition: 'transform 0.2s', position: 'relative', overflow: 'hidden' }}>
+                                    {event.imageUrl && (
+                                        <div style={{
+                                            width: '100%',
+                                            height: '150px',
+                                            backgroundImage: `url(${event.imageUrl})`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                            marginBottom: 'var(--spacing-md)'
+                                        }} />
+                                    )}
+
                                     {isOwner && (
                                         <div onClick={(e) => e.stopPropagation()} style={{ position: 'absolute', top: 'var(--spacing-sm)', right: 'var(--spacing-sm)', zIndex: 10 }}>
                                             <button
                                                 onClick={(e) => handleDelete(e, event.id, event.title)}
                                                 style={{
-                                                    background: 'rgba(239, 68, 68, 0.1)',
-                                                    color: 'var(--color-danger)',
+                                                    background: 'rgba(239, 68, 68, 0.9)',
+                                                    color: 'white',
                                                     padding: '4px 8px',
                                                     borderRadius: 'var(--radius-sm)',
                                                     fontSize: '0.75rem',
                                                     transition: 'all 0.2s'
                                                 }}
                                                 onMouseEnter={(e) => e.target.style.background = 'var(--color-danger)'}
-                                                onMouseLeave={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
+                                                onMouseLeave={(e) => e.target.style.background = 'rgba(239, 68, 68, 0.9)'}
                                             >
                                                 Delete
                                             </button>

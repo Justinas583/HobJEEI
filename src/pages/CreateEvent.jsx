@@ -16,6 +16,8 @@ export const CreateEvent = () => {
         type: 'Sport',
         location: '',
         locationUrl: '',
+        latitude: '',
+        longitude: '',
         imageUrl: '',
         maxAttendees: '',
         recurringEnabled: false,
@@ -34,6 +36,8 @@ export const CreateEvent = () => {
             type: formData.type,
             location: formData.location || null,
             locationUrl: formData.locationUrl || null,
+            latitude: formData.latitude ? parseFloat(formData.latitude) : null,
+            longitude: formData.longitude ? parseFloat(formData.longitude) : null,
             imageUrl: formData.imageUrl || null,
             maxAttendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
             ownerId: user.id,
@@ -134,6 +138,29 @@ export const CreateEvent = () => {
                             value={formData.locationUrl}
                             onChange={e => setFormData({ ...formData, locationUrl: e.target.value })}
                         />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: 'var(--spacing-xs)', fontSize: '0.875rem' }}>Latitude (Optional)</label>
+                            <input
+                                type="number"
+                                step="any"
+                                placeholder="54.6872"
+                                value={formData.latitude}
+                                onChange={e => setFormData({ ...formData, latitude: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: 'var(--spacing-xs)', fontSize: '0.875rem' }}>Longitude (Optional)</label>
+                            <input
+                                type="number"
+                                step="any"
+                                placeholder="25.2797"
+                                value={formData.longitude}
+                                onChange={e => setFormData({ ...formData, longitude: e.target.value })}
+                            />
+                        </div>
                     </div>
 
                     <div>

@@ -29,6 +29,16 @@ export const Layout = () => {
                                 Events
                             </button>
                         </Link>
+                        <Link to="/map">
+                            <button className={`btn ${location.pathname === '/map' ? 'btn-primary' : 'btn-ghost'}`}>
+                                Map
+                            </button>
+                        </Link>
+                        <Link to="/calendar">
+                            <button className={`btn ${location.pathname === '/calendar' ? 'btn-primary' : 'btn-ghost'}`}>
+                                Calendar
+                            </button>
+                        </Link>
                         {(user?.role === 'company' || user?.role === 'admin') && (
                             <Link to="/create">
                                 <button className={`btn ${location.pathname === '/create' ? 'btn-primary' : 'btn-ghost'}`}>
