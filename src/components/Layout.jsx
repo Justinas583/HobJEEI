@@ -19,7 +19,8 @@ export const Layout = () => {
                     <Link to="/" className="text-2xl" style={{
                         background: 'linear-gradient(to right, #3b82f6, #10b981)',
                         WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent'
+                        WebkitTextFillColor: 'transparent',
+                        fontFamily: "'HobJEEI Logo', sans-serif"
                     }}>
                         HobJEEI
                     </Link>

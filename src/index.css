@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'HobJEEI Logo';
+  src: url('/src/assets/logo.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 
