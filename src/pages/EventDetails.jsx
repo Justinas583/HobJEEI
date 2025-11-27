@@ -324,11 +324,24 @@ export const EventDetails = () => {
                 })}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--spacing-xl)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--spacing-xl)', flexDirection: 'column', alignItems: 'center', gap: 'var(--spacing-md)' }}>
                 {!registered && !eventFull && isOwner() && user?.role === 'company' && (
-                    <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
-                        Add Participant by Email
-                    </Button>
+                    <>
+                        <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
+                            Add Participant by Email
+                        </Button>
+                        <Button
+                            onClick={() => alert('Feature coming soon!')}
+                            style={{
+                                width: '100%',
+                                maxWidth: '300px',
+                                background: 'rgba(59, 130, 246, 0.1)',
+                                color: 'var(--color-primary)'
+                            }}
+                        >
+                            Invite Interested Users
+                        </Button>
+                    </>
                 )}
                 {!registered && !eventFull && !isOwner() && user?.role === 'client' && (
                     <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
