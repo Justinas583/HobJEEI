@@ -27,17 +27,17 @@ export const Layout = () => {
                     </Link>
                     <nav style={{ display: 'flex', gap: 'var(--spacing-md)', alignItems: 'center' }}>
                         <Link to="/dashboard">
-                            <button className={`btn ${location.pathname === '/dashboard' ? 'btn-primary' : 'btn-ghost'}`}>
+                            <button className={`btn ${location.pathname === '/dashboard' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
                                 Events
                             </button>
                         </Link>
                         <Link to="/dashboard/map">
-                            <button className={`btn ${location.pathname === '/dashboard/map' ? 'btn-primary' : 'btn-ghost'}`}>
+                            <button className={`btn ${location.pathname === '/dashboard/map' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
                                 Map
                             </button>
                         </Link>
                         <Link to="/dashboard/calendar">
-                            <button className={`btn ${location.pathname === '/dashboard/calendar' ? 'btn-primary' : 'btn-ghost'}`}>
+                            <button className={`btn ${location.pathname === '/dashboard/calendar' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
                                 Calendar
                             </button>
                         </Link>
@@ -69,7 +69,7 @@ export const Layout = () => {
                                     navigate('/');
                                 }}
                                 className="btn btn-ghost"
-                                style={{ fontSize: '0.875rem' }}
+                                style={{ fontSize: '1.1rem' }}
                             >
                                 Logout
                             </button>

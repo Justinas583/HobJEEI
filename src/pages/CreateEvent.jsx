@@ -191,7 +191,7 @@ export const CreateEvent = () => {
                         <input
                             type="number"
                             min="0"
-                            step="0.01"
+                            step="1"
                             placeholder="0.00"
                             value={formData.price}
                             onChange={e => setFormData({ ...formData, price: e.target.value })}

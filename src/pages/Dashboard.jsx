@@ -189,7 +189,7 @@ export const Dashboard = () => {
                 <Masonry
                     breakpointCols={{
                         default: 3,
-                        1100: 2,
+                        1200: 2,
                         700: 1
                     }}
                     className="masonry-grid"
