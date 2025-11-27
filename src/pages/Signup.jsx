@@ -28,7 +28,7 @@ export const Signup = () => {
     };
 
     return (
-        <div className="colorful-background">
+        <div className="auth-background">
             <div className="blob"></div>
 
             <Card style={{ maxWidth: '400px', width: '100%', position: 'relative', zIndex: 2 }}>

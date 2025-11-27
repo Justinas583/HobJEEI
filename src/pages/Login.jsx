@@ -36,11 +36,11 @@ export const Login = () => {
     };
 
     return (
-        <div className="colorful-background">
+        <div className="auth-background">
             <div className="blob"></div>
 
             <Card style={{ maxWidth: '400px', width: '100%', position: 'relative', zIndex: 2 }}>
-                <h1 className="text-2xl" style={{
+                <h1 className="text-2xl logo-inverted" style={{
                     marginBottom: 'var(--spacing-md)',
                     textAlign: 'center',
                     background: 'linear-gradient(to right, #df6674ff, #f257d5ff)',

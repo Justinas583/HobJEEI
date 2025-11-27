@@ -4,7 +4,7 @@ import { Button } from '../components/Button';
 
 export const Landing = () => {
     return (
-        <div className="colorful-background">
+        <div className="auth-background">
             <div className="blob"></div>
 
             {/* Main content */}
@@ -12,12 +12,13 @@ export const Landing = () => {
                 <h1 style={{
                     fontSize: 'clamp(4rem, 12vw, 8rem)',
                     fontWeight: 700,
-                    background: 'linear-gradient(to right, #df6674ff, #f257d5ff)',
+                    background: 'linear-gradient(to right, #ffffffff, #ffffffff)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontFamily: "'HobJEEI Logo', sans-serif",
                     marginBottom: 'var(--spacing-md)',
-                    letterSpacing: '0.02em'
+                    letterSpacing: '0.02em',
+                    mixBlendMode: 'difference'
                 }}>
                     HobJEEI
                 </h1>
