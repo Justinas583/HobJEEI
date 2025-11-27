@@ -36,18 +36,14 @@ export const Login = () => {
     };
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 'var(--spacing-md)'
-        }}>
-            <Card style={{ maxWidth: '400px', width: '100%' }}>
+        <div className="colorful-background">
+            <div className="blob"></div>
+
+            <Card style={{ maxWidth: '400px', width: '100%', position: 'relative', zIndex: 2 }}>
                 <h1 className="text-2xl" style={{
                     marginBottom: 'var(--spacing-md)',
                     textAlign: 'center',
-                    background: 'linear-gradient(to right, #3b82f6, #10b981)',
+                    background: 'linear-gradient(to right, #df6674ff, #f257d5ff)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontFamily: "'HobJEEI Logo', sans-serif"

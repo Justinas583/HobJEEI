@@ -369,7 +369,7 @@ select:focus {
 
 .colorful-background .blob {
   background: #0088ff;
-  bottom: -100px;
+  bottom: -50px;
   left: 45%;
   transform: translateX(-50%);
 }
