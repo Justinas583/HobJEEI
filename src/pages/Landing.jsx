@@ -4,55 +4,15 @@ import { Button } from '../components/Button';
 
 export const Landing = () => {
     return (
-        <div style={{
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
-            padding: 'var(--spacing-xl)',
-            position: 'relative',
-            overflow: 'hidden'
-        }}>
-            {/* Decorative gradient orbs */}
-            <div style={{
-                position: 'absolute',
-                top: '10%',
-                right: '15%',
-                width: '400px',
-                height: '400px',
-                background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
-                borderRadius: '50%',
-                filter: 'blur(60px)',
-                pointerEvents: 'none'
-            }} />
-            <div style={{
-                position: 'absolute',
-                bottom: '15%',
-                left: '10%',
-                width: '350px',
-                height: '350px',
-                background: 'radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%)',
-                borderRadius: '50%',
-                filter: 'blur(60px)',
-                pointerEvents: 'none'
-            }} />
+        <div className="colorful-background">
+            <div className="blob"></div>
 
             {/* Main content */}
-            <div style={{
-                position: 'relative',
-                zIndex: 1,
-                textAlign: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 'var(--spacing-xl)'
-            }}>
+            <div className="landing-content">
                 <h1 style={{
                     fontSize: 'clamp(4rem, 12vw, 8rem)',
                     fontWeight: 700,
-                    background: 'linear-gradient(to right, #3b82f6, #10b981)',
+                    background: 'linear-gradient(to right, #df6674ff, #f257d5ff)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontFamily: "'HobJEEI Logo', sans-serif",
