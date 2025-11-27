@@ -83,10 +83,31 @@ export const Dashboard = () => {
 
     return (
         <div>
-            <div className="flex-between" style={{ marginBottom: 'var(--spacing-lg)' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', width: '100%' }}>
-                    <div className="flex-between">
-                        <h1 className="text-2xl">Upcoming Events</h1>
+            <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', width: '100%' }}>
+                    {/* Line 1: Title + Toggle on left, Add Event button on right */}
+                    <div className="flex-between" style={{ gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+                            {user?.role !== 'admin' && (
+                                <label style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 'var(--spacing-xs)',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    color: 'var(--color-text-muted)',
+                                    whiteSpace: 'nowrap'
+                                }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={showMyEventsOnly}
+                                        onChange={(e) => setShowMyEventsOnly(e.target.checked)}
+                                        style={{ width: 'auto', cursor: 'pointer' }}
+                                    />
+                                    {getFilterLabel()}
+                                </label>
+                            )}
+                        </div>
                         {(user?.role === 'company' || user?.role === 'admin') && (
                             <Link to="/create">
                                 <Button>+ New Event</Button>
@@ -94,82 +115,63 @@ export const Dashboard = () => {
                         )}
                     </div>
 
-                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <input
-                            type="text"
-                            placeholder="Search events..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                    {/* Line 2: Search bar */}
+                    <input
+                        type="text"
+                        placeholder="Search events..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{
+                            width: '100%',
+                            padding: '8px 12px',
+                            borderRadius: 'var(--radius-sm)',
+                            border: '1px solid var(--color-border)',
+                            fontSize: '0.875rem'
+                        }}
+                    />
+
+                    {/* Line 3: Filter by Type on left, Sort on right */}
+                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                        <select
+                            value={selectedType}
+                            onChange={(e) => setSelectedType(e.target.value)}
                             style={{
-                                flex: '1 1 200px',
-                                minWidth: '200px',
                                 padding: '8px 12px',
                                 borderRadius: 'var(--radius-sm)',
                                 border: '1px solid var(--color-border)',
-                                fontSize: '0.875rem'
-                            }}
-                        />
-
-                        {user?.role !== 'admin' && (
-                            <label style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-xs)',
-                                cursor: 'pointer',
                                 fontSize: '0.875rem',
-                                color: 'var(--color-text-muted)',
-                                whiteSpace: 'nowrap'
-                            }}>
-                                <input
-                                    type="checkbox"
-                                    checked={showMyEventsOnly}
-                                    onChange={(e) => setShowMyEventsOnly(e.target.checked)}
-                                    style={{ width: 'auto', cursor: 'pointer' }}
-                                />
-                                {getFilterLabel()}
-                            </label>
-                        )}
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)',
+                                minWidth: '140px',
+                                flex: '1 1 auto'
+                            }}
+                        >
+                            <option value="All">All Types</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Hobby">Hobby</option>
+                            <option value="Meeting">Meeting</option>
+                            <option value="Social">Social</option>
+                        </select>
 
-                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
-                            <select
-                                value={selectedType}
-                                onChange={(e) => setSelectedType(e.target.value)}
-                                style={{
-                                    padding: '8px 12px',
-                                    borderRadius: 'var(--radius-sm)',
-                                    border: '1px solid var(--color-border)',
-                                    fontSize: '0.875rem',
-                                    backgroundColor: 'var(--color-surface)',
-                                    color: 'var(--color-text)',
-                                    minWidth: '120px'
-                                }}
-                            >
-                                <option value="All">All Types</option>
-                                <option value="Sport">Sport</option>
-                                <option value="Hobby">Hobby</option>
-                                <option value="Meeting">Meeting</option>
-                                <option value="Social">Social</option>
-                            </select>
-
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                style={{
-                                    padding: '8px 12px',
-                                    borderRadius: 'var(--radius-sm)',
-                                    border: '1px solid var(--color-border)',
-                                    fontSize: '0.875rem',
-                                    backgroundColor: 'var(--color-surface)',
-                                    color: 'var(--color-text)',
-                                    cursor: 'pointer',
-                                    minWidth: '150px'
-                                }}
-                            >
-                                <option value="date">Sort by Date</option>
-                                <option value="price-low">Price: Low to High</option>
-                                <option value="price-high">Price: High to Low</option>
-                            </select>
-                        </div>
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            style={{
+                                padding: '8px 12px',
+                                borderRadius: 'var(--radius-sm)',
+                                border: '1px solid var(--color-border)',
+                                fontSize: '0.875rem',
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)',
+                                cursor: 'pointer',
+                                minWidth: '170px',
+                                flex: '1 1 auto'
+                            }}
+                        >
+                            <option value="date">Sort by Date</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
                     </div>
                 </div>
             </div>
