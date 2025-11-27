@@ -112,7 +112,7 @@ export const Map = () => {
                                         👥 {event.attendees.length}{event.maxAttendees ? ` / ${event.maxAttendees}` : ''} attendees
                                     </p>
                                     <Link
-                                        to={`/event/${event.id}`}
+                                        to={`/dashboard/event/${event.id}`}
                                         style={{
                                             display: 'inline-block',
                                             padding: '0.25rem 0.75rem',

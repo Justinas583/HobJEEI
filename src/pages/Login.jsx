@@ -24,11 +24,11 @@ export const Login = () => {
                     role: 'admin'
                 };
                 await login(adminUser);
-                navigate('/'); // Redirect after admin login
+                navigate('/dashboard'); // Redirect after admin login
             } else {
                 // Regular user login
                 await login(formData.email, formData.password);
-                navigate('/'); // Redirect after user login
+                navigate('/dashboard'); // Redirect after user login
             }
         } catch (err) {
             setError(err.message);

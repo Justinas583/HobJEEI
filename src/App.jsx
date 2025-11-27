@@ -4,6 +4,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
+import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { CreateEvent } from './pages/CreateEvent';
 import { EditEvent } from './pages/EditEvent';
@@ -19,8 +20,15 @@ const PublicRoute = ({ children }) => {
 };
 
 function AppRoutes() {
+  const { user } = useAuth();
+
   return (
     <Routes>
+      {/* Landing page - only shown when not logged in */}
+      <Route path="/" element={
+        user ? <Navigate to="/dashboard" replace /> : <Landing />
+      } />
+
       <Route path="/login" element={
         <PublicRoute>
           <Login />
@@ -32,7 +40,8 @@ function AppRoutes() {
         </PublicRoute>
       } />
 
-      <Route path="/" element={
+      {/* Protected routes with Layout */}
+      <Route path="/dashboard" element={
         <ProtectedRoute>
           <Layout />
         </ProtectedRoute>
@@ -42,13 +51,13 @@ function AppRoutes() {
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="create" element={
           <ProtectedRoute>
-            {({ user }) => (user.role === 'company' || user.role === 'admin') ? <CreateEvent /> : <Navigate to="/" replace />}
+            {({ user }) => (user.role === 'company' || user.role === 'admin') ? <CreateEvent /> : <Navigate to="/dashboard" replace />}
           </ProtectedRoute>
         } />
         <Route path="event/:id" element={<EventDetails />} />
         <Route path="event/:id/edit" element={
           <ProtectedRoute>
-            {({ user }) => (user.role === 'company' || user.role === 'admin') ? <EditEvent /> : <Navigate to="/" replace />}
+            {({ user }) => (user.role === 'company' || user.role === 'admin') ? <EditEvent /> : <Navigate to="/dashboard" replace />}
           </ProtectedRoute>
         } />
       </Route>

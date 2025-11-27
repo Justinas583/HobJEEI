@@ -56,7 +56,7 @@ export const CreateEvent = () => {
         };
 
         await storage.addEvent(eventData);
-        navigate('/');
+        navigate('/dashboard');
     };
 
     const toggleWeekday = (day) => {

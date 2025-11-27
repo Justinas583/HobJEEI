@@ -21,7 +21,7 @@ export const Signup = () => {
 
         try {
             await signup(formData.name, formData.email, formData.password, formData.role);
-            navigate('/');
+            navigate('/dashboard');
         } catch (err) {
             setError(err.message);
         }

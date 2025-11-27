@@ -15,7 +15,7 @@ export const EventDetails = () => {
         const fetchEvent = async () => {
             const e = await storage.getEvent(id);
             if (!e) {
-                navigate('/');
+                navigate('/dashboard');
                 return;
             }
             setEvent(e);
@@ -96,7 +96,7 @@ export const EventDetails = () => {
     const handleDeleteEvent = async () => {
         if (window.confirm(`Are you sure you want to delete "${event.title}"? This action cannot be undone.`)) {
             await storage.deleteEvent(id);
-            navigate('/');
+            navigate('/dashboard');
         }
     };
 
@@ -141,7 +141,7 @@ export const EventDetails = () => {
     return (
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-                <Button variant="ghost" onClick={() => navigate('/')} style={{ paddingLeft: 0 }}>
+                <Button variant="ghost" onClick={() => navigate('/dashboard')} style={{ paddingLeft: 0 }}>
                     ← Back to Dashboard
                 </Button>
             </div>
@@ -186,7 +186,7 @@ export const EventDetails = () => {
                             </span>
                             {isOwner() && (
                                 <>
-                                    <Link to={`/event/${id}/edit`}>
+                                    <Link to={`/dashboard/event/${id}/edit`}>
                                         <button
                                             style={{
                                                 background: 'rgba(59, 130, 246, 0.1)',

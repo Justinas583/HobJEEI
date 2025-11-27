@@ -109,7 +109,7 @@ export const Dashboard = () => {
                             )}
                         </div>
                         {(user?.role === 'company' || user?.role === 'admin') && (
-                            <Link to="/create">
+                            <Link to="/dashboard/create">
                                 <Button>+ New Event</Button>
                             </Link>
                         )}
@@ -180,7 +180,7 @@ export const Dashboard = () => {
                 <Card className="flex-center" style={{ minHeight: '200px', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
                     <p className="text-sm">No events found.</p>
                     {(user?.role === 'company' || user?.role === 'admin') && (
-                        <Link to="/create">
+                        <Link to="/dashboard/create">
                             <Button variant="ghost">Create your first event</Button>
                         </Link>
                     )}
@@ -204,7 +204,7 @@ export const Dashboard = () => {
                             : null;
 
                         return (
-                            <Link key={event.id} to={`/event/${event.id}`} style={{ display: 'block' }}>
+                            <Link key={event.id} to={`/dashboard/event/${event.id}`} style={{ display: 'block' }}>
                                 <Card className="event-card hover-scale" style={{ transition: 'transform 0.2s', position: 'relative', overflow: 'hidden' }}>
                                     {event.imageUrl && (
                                         <div style={{

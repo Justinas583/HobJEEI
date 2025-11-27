@@ -15,20 +15,20 @@ export const EditEvent = () => {
         const fetchEvent = async () => {
             const event = await storage.getEvent(id);
             if (!event) {
-                navigate('/');
+                navigate('/dashboard');
                 return;
             }
 
             // Check if user is owner
             if (event.ownerId !== user.id && user.role !== 'admin') {
-                navigate(`/event/${id}`);
+                navigate(`/dashboard/event/${id}`);
                 return;
             }
 
             setFormData({
                 title: event.title,
                 description: event.description,
-                date: event.date,
+                date: event.date ? new Date(new Date(event.date).getTime() - (new Date(event.date).getTimezoneOffset() * 60000)).toISOString().slice(0, 16) : '',
                 duration: event.duration || '60',
                 type: event.type,
                 location: event.location || '',
@@ -74,7 +74,7 @@ export const EditEvent = () => {
         };
 
         await storage.updateEvent(id, updates);
-        navigate(`/event/${id}`);
+        navigate(`/dashboard/event/${id}`);
     };
 
     const toggleWeekday = (day) => {
@@ -290,7 +290,7 @@ export const EditEvent = () => {
                     </div>
 
                     <div style={{ display: 'flex', gap: 'var(--spacing-sm)', marginTop: 'var(--spacing-sm)' }}>
-                        <Button type="button" variant="ghost" onClick={() => navigate(`/event/${id}`)} style={{ flex: 1 }}>
+                        <Button type="button" variant="ghost" onClick={() => navigate(`/dashboard/event/${id}`)} style={{ flex: 1 }}>
                             Cancel
                         </Button>
                         <Button type="submit" style={{ flex: 1 }}>Save Changes</Button>

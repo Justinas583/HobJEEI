@@ -268,7 +268,7 @@ export const CalendarPage = () => {
                                         👥 {event.attendees.length}{event.maxAttendees ? ` / ${event.maxAttendees}` : ''}
                                     </p>
                                     <Link
-                                        to={`/event/${event.id}`}
+                                        to={`/dashboard/event/${event.id}`}
                                         style={{
                                             display: 'inline-block',
                                             padding: '0.375rem 0.75rem',
