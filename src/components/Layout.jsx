@@ -69,9 +69,10 @@ export const Layout = () => {
                                     navigate('/');
                                 }}
                                 className="btn btn-ghost"
-                                style={{ fontSize: '1.1rem' }}
+                                style={{ fontSize: '1.25rem' }}
+                                title="Logout"
                             >
-                                Logout
+                                ↩
                             </button>
                         </div>
                     </nav>
