@@ -75,22 +75,15 @@ export const EventDetails = () => {
     };
 
     const toggleAttendance = async (attendeeId) => {
-        // Note: storage.toggleAttendance was removed in refactor, need to check implementation
-        // The Supabase refactor didn't include toggleAttendance. I need to add it or implement it here.
-        // Let's implement it here by getting the attendee, flipping status, and updating.
-        // Actually, let's fix storage.js to include toggleAttendance or handle it here.
-        // For now, I'll assume I need to implement it manually or add it to storage.js.
-        // Let's check storage.js again. I replaced the whole file and didn't include toggleAttendance.
-        // I should re-add toggleAttendance to storage.js or implement it here.
-        // Implementing here is cleaner for now to avoid another file edit if possible, but storage.js is better.
-        // Let's assume I will fix storage.js in a moment. For now, I will write the async call assuming it exists or I will use updateAttendee.
-        // Wait, I didn't add updateAttendee either.
-        // I should add `updateAttendee` to storage.js.
-
-        // For this step, I will comment it out or try to implement logic if possible.
-        // But wait, I can't easily do it without a storage method.
-        // I'll add a TODO and fix storage.js next.
-        console.warn('Toggle attendance not fully implemented in Supabase refactor yet');
+        try {
+            await storage.toggleAttendance(id, attendeeId);
+            // Refresh event data to show updated status
+            const updatedEvent = await storage.getEvent(id);
+            setEvent(updatedEvent);
+        } catch (error) {
+            console.error('Error toggling attendance:', error);
+            alert('Failed to update attendance status');
+        }
     };
 
     const handleDeleteEvent = async () => {

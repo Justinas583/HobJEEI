@@ -174,7 +174,7 @@ export const CalendarPage = () => {
         <div>
             <h1 className="text-2xl" style={{ marginBottom: 'var(--spacing-md)' }}>Event Calendar</h1>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 'var(--spacing-lg)' }}>
+            <div className="calendar-layout">
                 <div>
                     <div style={{
                         background: 'var(--color-surface)',

@@ -201,6 +201,7 @@ select:focus {
   width: 100%;
   border: none !important;
   font-family: var(--font-family);
+  flex: 0 0;
 }
 
 .custom-calendar .react-calendar__navigation {
@@ -310,5 +311,20 @@ select:focus {
   /* Hide user name on mobile to save space */
   .user-info-name {
     display: none;
+  }
+}
+
+/* Calendar Layout */
+.calendar-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+@media (min-width: 900px) {
+  .calendar-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 400px) 1fr;
+    align-items: start;
   }
 }
