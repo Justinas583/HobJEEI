@@ -267,3 +267,41 @@ select:focus {
   color: var(--color-text-muted);
   opacity: 0.5;
 }
+
+/* Hover Scale Effect */
+.hover-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+
+  header .container {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  nav {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm) !important;
+  }
+
+  nav .btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.875rem;
+  }
+
+  /* Hide user name on mobile to save space */
+  .user-info-name {
+    display: none;
+  }
+}

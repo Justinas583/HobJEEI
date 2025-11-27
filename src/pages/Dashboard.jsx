@@ -130,42 +130,46 @@ export const Dashboard = () => {
                             </label>
                         )}
 
-                        <select
-                            value={selectedType}
-                            onChange={(e) => setSelectedType(e.target.value)}
-                            style={{
-                                padding: '8px 12px',
-                                borderRadius: 'var(--radius-sm)',
-                                border: '1px solid var(--color-border)',
-                                fontSize: '0.875rem',
-                                backgroundColor: 'var(--color-surface)',
-                                color: 'var(--color-text)'
-                            }}
-                        >
-                            <option value="All">All Types</option>
-                            <option value="Sport">Sport</option>
-                            <option value="Hobby">Hobby</option>
-                            <option value="Meeting">Meeting</option>
-                            <option value="Social">Social</option>
-                        </select>
+                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+                            <select
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value)}
+                                style={{
+                                    padding: '8px 12px',
+                                    borderRadius: 'var(--radius-sm)',
+                                    border: '1px solid var(--color-border)',
+                                    fontSize: '0.875rem',
+                                    backgroundColor: 'var(--color-surface)',
+                                    color: 'var(--color-text)',
+                                    minWidth: '120px'
+                                }}
+                            >
+                                <option value="All">All Types</option>
+                                <option value="Sport">Sport</option>
+                                <option value="Hobby">Hobby</option>
+                                <option value="Meeting">Meeting</option>
+                                <option value="Social">Social</option>
+                            </select>
 
-                        <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}
-                            style={{
-                                padding: '8px 12px',
-                                borderRadius: 'var(--radius-sm)',
-                                border: '1px solid var(--color-border)',
-                                fontSize: '0.875rem',
-                                backgroundColor: 'var(--color-surface)',
-                                color: 'var(--color-text)',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            <option value="date">Sort by Date</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                        </select>
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                style={{
+                                    padding: '8px 12px',
+                                    borderRadius: 'var(--radius-sm)',
+                                    border: '1px solid var(--color-border)',
+                                    fontSize: '0.875rem',
+                                    backgroundColor: 'var(--color-surface)',
+                                    color: 'var(--color-text)',
+                                    cursor: 'pointer',
+                                    minWidth: '150px'
+                                }}
+                            >
+                                <option value="date">Sort by Date</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -199,7 +203,7 @@ export const Dashboard = () => {
 
                         return (
                             <Link key={event.id} to={`/event/${event.id}`} style={{ display: 'block' }}>
-                                <Card className="event-card" style={{ transition: 'transform 0.2s', position: 'relative', overflow: 'hidden' }}>
+                                <Card className="event-card hover-scale" style={{ transition: 'transform 0.2s', position: 'relative', overflow: 'hidden' }}>
                                     {event.imageUrl && (
                                         <div style={{
                                             width: '100%',

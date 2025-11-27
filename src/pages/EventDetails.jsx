@@ -263,60 +263,20 @@ export const EventDetails = () => {
                         </div>
                     )}
 
+                    <div style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                        <span style={{ fontSize: '0.875rem' }}>👥</span>
+                        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+                            {event.attendees.length}{event.maxAttendees ? ` / ${event.maxAttendees}` : ''} attendees
+                        </span>
+                    </div>
+
                     <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginTop: 'var(--spacing-md)' }}>{event.description}</p>
                 </div>
             </Card>
 
-            <div className="flex-between" style={{ marginBottom: 'var(--spacing-md)' }}>
-                <h2 className="text-xl">
-                    Attendees ({event.attendees.length}{event.maxAttendees ? ` / ${event.maxAttendees}` : ''})
-                </h2>
-                {!registered && !eventFull && isOwner() && user?.role === 'company' && (
-                    <Button onClick={handleRegister}>
-                        Add by Email
-                    </Button>
-                )}
-                {!registered && !eventFull && !isOwner() && user?.role === 'client' && (
-                    <Button onClick={handleRegister}>
-                        Register
-                    </Button>
-                )}
-                {!registered && eventFull && user?.role === 'client' && (
-                    <div style={{
-                        padding: 'var(--spacing-sm) var(--spacing-md)',
-                        background: 'rgba(239, 68, 68, 0.1)',
-                        color: 'var(--color-danger)',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '0.875rem'
-                    }}>
-                        Event Full
-                    </div>
-                )}
-                {registered && user?.role === 'client' && (
-                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center' }}>
-                        <div style={{
-                            padding: 'var(--spacing-sm) var(--spacing-md)',
-                            background: 'rgba(16, 185, 129, 0.1)',
-                            color: 'var(--color-success)',
-                            borderRadius: 'var(--radius-sm)',
-                            fontSize: '0.875rem'
-                        }}>
-                            ✓ You're registered
-                        </div>
-                        <Button
-                            onClick={handleUnregister}
-                            style={{
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                color: 'var(--color-danger)'
-                            }}
-                        >
-                            Unregister
-                        </Button>
-                    </div>
-                )}
-            </div>
+            <h2 className="text-xl" style={{ marginBottom: 'var(--spacing-md)' }}>Participants</h2>
 
-            <div className="grid-auto" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+            <div className="grid-auto" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', marginBottom: 'var(--spacing-xl)' }}>
                 {event.attendees.map(attendee => {
                     const isCurrentUser = user?.id === attendee.userId;
                     const canToggle = user?.role === 'company' || isCurrentUser;
@@ -369,6 +329,59 @@ export const EventDetails = () => {
                         </Card>
                     );
                 })}
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--spacing-xl)' }}>
+                {!registered && !eventFull && isOwner() && user?.role === 'company' && (
+                    <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
+                        Add Participant by Email
+                    </Button>
+                )}
+                {!registered && !eventFull && !isOwner() && user?.role === 'client' && (
+                    <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
+                        Register for Event
+                    </Button>
+                )}
+                {!registered && eventFull && user?.role === 'client' && (
+                    <div style={{
+                        padding: 'var(--spacing-md)',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        color: 'var(--color-danger)',
+                        borderRadius: 'var(--radius-sm)',
+                        fontSize: '1rem',
+                        textAlign: 'center',
+                        width: '100%'
+                    }}>
+                        Event Full
+                    </div>
+                )}
+                {registered && user?.role === 'client' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', alignItems: 'center', width: '100%' }}>
+                        <div style={{
+                            padding: 'var(--spacing-md)',
+                            background: 'rgba(16, 185, 129, 0.1)',
+                            color: 'var(--color-success)',
+                            borderRadius: 'var(--radius-sm)',
+                            fontSize: '1rem',
+                            textAlign: 'center',
+                            width: '100%',
+                            maxWidth: '300px'
+                        }}>
+                            ✓ You're registered
+                        </div>
+                        <Button
+                            onClick={handleUnregister}
+                            style={{
+                                background: 'rgba(239, 68, 68, 0.1)',
+                                color: 'var(--color-danger)',
+                                width: '100%',
+                                maxWidth: '300px'
+                            }}
+                        >
+                            Unregister
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     );

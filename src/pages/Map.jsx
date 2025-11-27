@@ -46,7 +46,7 @@ export const Map = () => {
 
     // Default center (Vilnius, Lithuania)
     const defaultCenter = [54.6872, 25.2797];
-    const defaultZoom = 7;
+    const defaultZoom = 13;
 
     return (
         <div>

@@ -39,13 +39,7 @@ export const Layout = () => {
                                 Calendar
                             </button>
                         </Link>
-                        {(user?.role === 'company' || user?.role === 'admin') && (
-                            <Link to="/create">
-                                <button className={`btn ${location.pathname === '/create' ? 'btn-primary' : 'btn-ghost'}`}>
-                                    Create Event
-                                </button>
-                            </Link>
-                        )}
+
                         <button
                             onClick={toggleTheme}
                             className="btn btn-ghost"
@@ -62,7 +56,7 @@ export const Layout = () => {
                             borderLeft: '1px solid var(--color-border)'
                         }}>
                             <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>{user?.name}</div>
+                                <div className="user-info-name" style={{ fontSize: '0.875rem', fontWeight: 500 }}>{user?.name}</div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'capitalize' }}>
                                     {user?.role}
                                 </div>

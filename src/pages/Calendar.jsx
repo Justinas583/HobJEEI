@@ -15,6 +15,7 @@ const eventColors = {
 
 export const CalendarPage = () => {
     const [date, setDate] = useState(new Date());
+    const [viewDate, setViewDate] = useState(new Date());
     const [events, setEvents] = useState([]);
     const [expandedEvents, setExpandedEvents] = useState([]);
 
@@ -76,9 +77,10 @@ export const CalendarPage = () => {
     };
 
     // Get all events (including recurring instances) for the current month view
+    // Get all events (including recurring instances) for the current month view
     const getAllEventsForMonth = () => {
-        const year = date.getFullYear();
-        const month = date.getMonth();
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
         const startDate = new Date(year, month, 1);
         const endDate = new Date(year, month + 1, 0);
 
@@ -161,6 +163,11 @@ export const CalendarPage = () => {
         setExpandedEvents(dayEvents);
     };
 
+    // Handle month change
+    const handleActiveStartDateChange = ({ activeStartDate }) => {
+        setViewDate(activeStartDate);
+    };
+
     const selectedDateEvents = getEventsForDate(date);
 
     return (
@@ -178,6 +185,7 @@ export const CalendarPage = () => {
                         <Calendar
                             onChange={handleDateChange}
                             value={date}
+                            onActiveStartDateChange={handleActiveStartDateChange}
                             tileContent={tileContent}
                             className="custom-calendar"
                         />
