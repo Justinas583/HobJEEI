@@ -69,7 +69,7 @@ export const Landing = () => {
                     lineHeight: 1.6,
                     marginBottom: 'var(--spacing-lg)'
                 }}>
-                    Discover and join exciting events in your community
+                    Connecting available people with available events
                 </p>
 
                 <Link to="/login">
