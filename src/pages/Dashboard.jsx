@@ -84,36 +84,38 @@ export const Dashboard = () => {
     return (
         <div>
             <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', width: '100%' }}>
-                    {/* Line 1: Title + Toggle on left, Add Event button on right */}
-                    <div className="flex-between" style={{ gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
-                            {user?.role !== 'admin' && (
-                                <label style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 'var(--spacing-xs)',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    color: 'var(--color-text-muted)',
-                                    whiteSpace: 'nowrap'
-                                }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={showMyEventsOnly}
-                                        onChange={(e) => setShowMyEventsOnly(e.target.checked)}
-                                        style={{ width: 'auto', cursor: 'pointer' }}
-                                    />
-                                    {getFilterLabel()}
-                                </label>
-                            )}
-                        </div>
-                        {(user?.role === 'company' || user?.role === 'admin') && (
-                            <Link to="/dashboard/create">
-                                <Button>+ New Event</Button>
-                            </Link>
+                {/* Line 1: Title + Toggle on left, Add Event button on right */}
+                <div className="flex-between" style={{ gap: 'var(--spacing-md)', flexWrap: 'wrap', marginBottom: 'var(--spacing-lg)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
+                        {user && user.role !== 'admin' && (
+                            <label style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-xs)',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                color: 'var(--color-text-muted)',
+                                whiteSpace: 'nowrap'
+                            }}>
+                                <input
+                                    type="checkbox"
+                                    checked={showMyEventsOnly}
+                                    onChange={(e) => setShowMyEventsOnly(e.target.checked)}
+                                    style={{ width: 'auto', cursor: 'pointer' }}
+                                />
+                                {getFilterLabel()}
+                            </label>
                         )}
                     </div>
+                    {user && (user.role === 'company' || user.role === 'admin') && (
+                        <Link to="/dashboard/create">
+                            <Button>+ New Event</Button>
+                        </Link>
+                    )}
+                </div>
+
+                {/* Search, Filter, and Sort */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', width: '100%' }}>
 
                     {/* Line 2: Search bar */}
                     <input
@@ -179,7 +181,7 @@ export const Dashboard = () => {
             {events.length === 0 ? (
                 <Card className="flex-center" style={{ minHeight: '200px', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
                     <p className="text-sm">No events found.</p>
-                    {(user?.role === 'company' || user?.role === 'admin') && (
+                    {user && (user.role === 'company' || user.role === 'admin') && (
                         <Link to="/dashboard/create">
                             <Button variant="ghost">Create your first event</Button>
                         </Link>

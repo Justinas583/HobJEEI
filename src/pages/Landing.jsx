@@ -33,26 +33,52 @@ export const Landing = () => {
                     Connecting available people with available events
                 </p>
 
-                <Link to="/login">
-                    <Button style={{
-                        fontSize: '1.125rem',
-                        padding: 'var(--spacing-md) var(--spacing-xl)',
-                        background: 'linear-gradient(to right, #3b82f6, #10b981)',
-                        border: 'none',
-                        boxShadow: '0 10px 40px rgba(59, 130, 246, 0.3)',
-                        transition: 'all 0.3s ease'
-                    }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 15px 50px rgba(59, 130, 246, 0.4)';
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', alignItems: 'center' }}>
+                    <Link to="/login">
+                        <Button style={{
+                            fontSize: '1.125rem',
+                            padding: 'var(--spacing-md) var(--spacing-xl)',
+                            background: 'linear-gradient(to right, #3b82f6, #10b981)',
+                            border: 'none',
+                            boxShadow: '0 10px 40px rgba(59, 130, 246, 0.3)',
+                            transition: 'all 0.3s ease'
                         }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 10px 40px rgba(59, 130, 246, 0.3)';
-                        }}>
-                        Get Started
-                    </Button>
-                </Link>
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 15px 50px rgba(59, 130, 246, 0.4)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 10px 40px rgba(59, 130, 246, 0.3)';
+                            }}>
+                            Get Started
+                        </Button>
+                    </Link>
+
+                    <Link to="/dashboard">
+                        <button style={{
+                            background: 'transparent',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            color: 'var(--color-text-muted)',
+                            padding: 'var(--spacing-sm) var(--spacing-lg)',
+                            borderRadius: 'var(--radius-md)',
+                            fontSize: '0.875rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                        }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.borderColor = 'var(--color-text)';
+                                e.currentTarget.style.color = 'var(--color-text)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                                e.currentTarget.style.color = 'var(--color-text-muted)';
+                            }}
+                        >
+                            Browse as Guest
+                        </button>
+                    </Link>
+                </div>
 
                 <p style={{
                     fontSize: '0.875rem',

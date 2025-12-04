@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -14,6 +14,7 @@ export const Signup = () => {
         role: 'client'
     });
     const [error, setError] = useState('');
+    const location = useLocation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +22,12 @@ export const Signup = () => {
 
         try {
             await signup(formData.name, formData.email, formData.password, formData.role);
-            navigate('/dashboard');
+
+            // Check for redirect param
+            const params = new URLSearchParams(location.search);
+            const redirect = params.get('redirect');
+
+            navigate(redirect || '/dashboard');
         } catch (err) {
             setError(err.message);
         }
@@ -120,7 +126,7 @@ export const Signup = () => {
 
                 <p style={{ textAlign: 'center', marginTop: 'var(--spacing-lg)', fontSize: '0.875rem' }}>
                     Already have an account?{' '}
-                    <Link to="/login" style={{ color: 'var(--color-primary)', fontWeight: 500 }}>
+                    <Link to={`/login${location.search}`} style={{ color: 'var(--color-primary)', fontWeight: 500 }}>
                         Login
                     </Link>
                 </p>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -7,6 +7,7 @@ import { Button } from '../components/Button';
 export const Login = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
+    const location = useLocation();
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
 
@@ -24,12 +25,16 @@ export const Login = () => {
                     role: 'admin'
                 };
                 await login(adminUser);
-                navigate('/dashboard'); // Redirect after admin login
             } else {
                 // Regular user login
                 await login(formData.email, formData.password);
-                navigate('/dashboard'); // Redirect after user login
             }
+
+            // Check for redirect param
+            const params = new URLSearchParams(location.search);
+            const redirect = params.get('redirect');
+            navigate(redirect || '/dashboard');
+
         } catch (err) {
             setError(err.message);
         }
@@ -101,7 +106,7 @@ export const Login = () => {
 
                 <p style={{ textAlign: 'center', marginTop: 'var(--spacing-md)', fontSize: '0.875rem' }}>
                     Don't have an account?{' '}
-                    <Link to="/signup" style={{ color: 'var(--color-primary)', fontWeight: 500 }}>
+                    <Link to={`/signup${location.search}`} style={{ color: 'var(--color-primary)', fontWeight: 500 }}>
                         Sign up
                     </Link>
                 </p>

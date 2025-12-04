@@ -40,21 +40,30 @@ function AppRoutes() {
         </PublicRoute>
       } />
 
-      {/* Protected routes with Layout */}
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
-      }>
+      {/* Dashboard routes - Public access for main dashboard and event details */}
+      <Route path="/dashboard" element={<Layout />}>
         <Route index element={<Dashboard />} />
-        <Route path="map" element={<Map />} />
-        <Route path="calendar" element={<CalendarPage />} />
+
+        {/* Protected sub-routes */}
+        <Route path="map" element={
+          <ProtectedRoute>
+            <Map />
+          </ProtectedRoute>
+        } />
+        <Route path="calendar" element={
+          <ProtectedRoute>
+            <CalendarPage />
+          </ProtectedRoute>
+        } />
         <Route path="create" element={
           <ProtectedRoute>
             {({ user }) => (user.role === 'company' || user.role === 'admin') ? <CreateEvent /> : <Navigate to="/dashboard" replace />}
           </ProtectedRoute>
         } />
+
+        {/* Public event details */}
         <Route path="event/:id" element={<EventDetails />} />
+
         <Route path="event/:id/edit" element={
           <ProtectedRoute>
             {({ user }) => (user.role === 'company' || user.role === 'admin') ? <EditEvent /> : <Navigate to="/dashboard" replace />}

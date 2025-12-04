@@ -34,16 +34,21 @@ export const Layout = () => {
                                     Events
                                 </button>
                             </Link>
-                            <Link to="/dashboard/map">
-                                <button className={`btn ${location.pathname === '/dashboard/map' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
-                                    Map
-                                </button>
-                            </Link>
-                            <Link to="/dashboard/calendar">
-                                <button className={`btn ${location.pathname === '/dashboard/calendar' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
-                                    Calendar
-                                </button>
-                            </Link>
+
+                            {user && (
+                                <>
+                                    <Link to="/dashboard/map">
+                                        <button className={`btn ${location.pathname === '/dashboard/map' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
+                                            Map
+                                        </button>
+                                    </Link>
+                                    <Link to="/dashboard/calendar">
+                                        <button className={`btn ${location.pathname === '/dashboard/calendar' ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: '1.1rem' }}>
+                                            Calendar
+                                        </button>
+                                    </Link>
+                                </>
+                            )}
 
                             <button
                                 onClick={toggleTheme}
@@ -53,31 +58,48 @@ export const Layout = () => {
                             >
                                 {theme === 'dark' ? '☀️' : '🌙'}
                             </button>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--spacing-sm)',
-                                paddingLeft: 'var(--spacing-md)',
-                                borderLeft: '1px solid var(--color-border)'
-                            }}>
-                                <div style={{ textAlign: 'right' }}>
-                                    <div className="user-info-name" style={{ fontSize: '0.875rem', fontWeight: 500 }}>{user?.name}</div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'capitalize' }}>
-                                        {user?.role}
+
+                            {user ? (
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 'var(--spacing-sm)',
+                                    paddingLeft: 'var(--spacing-md)',
+                                    borderLeft: '1px solid var(--color-border)'
+                                }}>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div className="user-info-name" style={{ fontSize: '0.875rem', fontWeight: 500 }}>{user.name}</div>
+                                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'capitalize' }}>
+                                            {user.role}
+                                        </div>
                                     </div>
+                                    <button
+                                        onClick={() => {
+                                            logout();
+                                            navigate('/');
+                                        }}
+                                        className="btn btn-ghost"
+                                        style={{ fontSize: '1.25rem' }}
+                                        title="Logout"
+                                    >
+                                        ↩
+                                    </button>
                                 </div>
-                                <button
-                                    onClick={() => {
-                                        logout();
-                                        navigate('/');
-                                    }}
-                                    className="btn btn-ghost"
-                                    style={{ fontSize: '1.25rem' }}
-                                    title="Logout"
-                                >
-                                    ↩
-                                </button>
-                            </div>
+                            ) : (
+                                <div style={{
+                                    display: 'flex',
+                                    gap: 'var(--spacing-sm)',
+                                    paddingLeft: 'var(--spacing-md)',
+                                    borderLeft: '1px solid var(--color-border)'
+                                }}>
+                                    <Link to="/login">
+                                        <button className="btn btn-ghost">Login</button>
+                                    </Link>
+                                    <Link to="/signup">
+                                        <button className="btn btn-primary">Sign Up</button>
+                                    </Link>
+                                </div>
+                            )}
                         </nav>
                     </div>
                 </header>

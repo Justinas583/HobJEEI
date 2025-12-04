@@ -325,7 +325,15 @@ export const EventDetails = () => {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--spacing-xl)', flexDirection: 'column', alignItems: 'center', gap: 'var(--spacing-md)' }}>
-                {!registered && !eventFull && isOwner() && user?.role === 'company' && (
+                {!user && (
+                    <Link to={`/login?redirect=/dashboard/event/${id}`} style={{ width: '100%', maxWidth: '300px' }}>
+                        <Button style={{ width: '100%' }}>
+                            Login to Register
+                        </Button>
+                    </Link>
+                )}
+
+                {user && !registered && !eventFull && isOwner() && user.role === 'company' && (
                     <>
                         <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
                             Add Participant by Email
@@ -343,12 +351,12 @@ export const EventDetails = () => {
                         </Button>
                     </>
                 )}
-                {!registered && !eventFull && !isOwner() && user?.role === 'client' && (
+                {user && !registered && !eventFull && !isOwner() && user.role === 'client' && (
                     <Button onClick={handleRegister} style={{ width: '100%', maxWidth: '300px' }}>
                         Register for Event
                     </Button>
                 )}
-                {!registered && eventFull && user?.role === 'client' && (
+                {user && !registered && eventFull && user.role === 'client' && (
                     <div style={{
                         padding: 'var(--spacing-md)',
                         background: 'rgba(239, 68, 68, 0.1)',
@@ -361,7 +369,7 @@ export const EventDetails = () => {
                         Event Full
                     </div>
                 )}
-                {registered && user?.role === 'client' && (
+                {user && registered && user.role === 'client' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', alignItems: 'center', width: '100%' }}>
                         <div style={{
                             padding: 'var(--spacing-md)',
