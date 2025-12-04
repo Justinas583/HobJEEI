@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -16,7 +16,15 @@ import { Signup } from './pages/Signup';
 
 const PublicRoute = ({ children }) => {
   const { user } = useAuth();
-  return user ? <Navigate to="/" replace /> : children;
+  const location = useLocation();
+
+  if (user) {
+    const params = new URLSearchParams(location.search);
+    const redirect = params.get('redirect');
+    return <Navigate to={redirect || "/"} replace />;
+  }
+
+  return children;
 };
 
 function AppRoutes() {
