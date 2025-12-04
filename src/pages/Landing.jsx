@@ -8,7 +8,15 @@ export const Landing = () => {
             <div className="blob"></div>
 
             {/* Main content */}
-            <div className="landing-content">
+            <div className="landing-content" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                zIndex: 2,
+                width: '100%',
+                padding: 'var(--spacing-md)'
+            }}>
                 <h1 style={{
                     fontSize: 'clamp(4rem, 12vw, 8rem)',
                     fontWeight: 700,
